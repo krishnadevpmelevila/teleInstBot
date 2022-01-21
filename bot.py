@@ -12,22 +12,15 @@ import os
 
 import http.server
 import socketserver
+from os.path import join, dirname
+from dotenv import load_dotenv
 
-class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
-    def do_GET(self):
-        if self.path == '/':
-            self.path = 'new.html'
-        return http.server.SimpleHTTPRequestHandler.do_GET(self)
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
 
-# Create an object of the above class
-handler_object = MyHttpRequestHandler
+print('Ready?')
 
-PORT = 8000
-my_server = socketserver.TCPServer(("", PORT), handler_object)
-
-# Star the server
-my_server.serve_forever()
-load_dotenv() 
+print("Bot is online!")
 def download_image(url: str):
  
     # post request to server
@@ -221,3 +214,17 @@ updater.dispatcher.add_handler(MessageHandler(Filters.text, unknown_text))
 
 updater.start_polling()
 #start http server on port 3000
+class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        if self.path == '/':
+            self.path = 'new.html'
+        return http.server.SimpleHTTPRequestHandler.do_GET(self)
+
+# Create an object of the above class
+handler_object = MyHttpRequestHandler
+
+PORT = 3000
+my_server = socketserver.TCPServer(("", PORT), handler_object)
+print("Server started!")
+# Star the server
+my_server.serve_forever()
