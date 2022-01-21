@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 from telegram.ext.updater import Updater
 from telegram.update import Update
@@ -7,13 +8,14 @@ from telegram.ext.messagehandler import MessageHandler
 from telegram.ext.filters import Filters
 import requests
 import re
+import os
 
-
+load_dotenv() 
 def download_image(url: str):
  
     # post request to server
 
-    api = 'https://instasave.website/insta-downloader'
+    api = os.environ.get('API_POST')
     myobj = {
         'link': url}
 
@@ -29,7 +31,8 @@ def download_image(url: str):
 def sdownload_story(url: str,num:int):
 
 
-    api = 'https://instasave.website/instagram-stories-downloader'
+    api = os.environ.get('API_STORY')
+
     url=url.replace(str(num), "")
     link=url.replace(" ",'')
     myobj = {'username': link}
@@ -72,7 +75,7 @@ def sstory(update: Update, context: CallbackContext):
         
 # post request to server 
 def download_story(url: str):
-    api = 'https://instasave.website/instagram-stories-downloader'
+    api = os.environ.get('API_STORY')
     if(url.startswith('https://www')):
         link=url.replace("https://www.instagram.com/stories/","")
         res = link[:link.index('/') + len('/')]
@@ -119,7 +122,7 @@ def download_story(url: str):
 
 
 
-updater = Updater("5027109401:AAHlC-Pl8wBLce8Qmbop3qNSBYrAtaQh0QM",use_context=True)
+updater = Updater(os.environ.get('TOKEN'),use_context=True)
 
 
 def start(update: Update, context: CallbackContext):
